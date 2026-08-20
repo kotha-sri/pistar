@@ -1,0 +1,14 @@
+f1tenth_racetracks/
+rpl4f110/
+generated_tracks/
+__pycache__/
+*.zip
+*.pkl
+checkpoints/
+best_model/
+logs/
+debug_frames/
+ablation/
+crossq/
+mbpo/
+reptile/
