@@ -52,6 +52,8 @@ REWARD_PARAMS = {
     "tau_dev": 0.1,
     "alpha_heading": 0.25,
     "tau_psi": 0.0,
+    "alpha_raceline": 0.0,
+    "use_raceline_progress": False,
 }
 
 
@@ -65,6 +67,61 @@ def load_centerline(track_dir, track_name):
     path = os.path.join(track_dir, f"{track_name}_centerline.csv")
     data = np.loadtxt(path, delimiter=",", skiprows=1)
     return data
+
+
+def build_feasible_raceline(raceline, centerline, car_width=0.31, margin=0.10,
+                            blend=1.0):
+    """Return a PP reference that follows the TRUE optimal raceline but is
+    clamped inside the drivable corridor so it never clips a wall.
+
+    raceline:   (N,7) s,x,y,psi,kappa,vx,ax  (the optimal line)
+    centerline: (M,4) x,y,w_right,w_left     (corridor half-widths)
+    Output is in the same 7-col format as build_pp_raceline_from_centerline,
+    carrying the raceline's real vx/ax speed profile.
+    """
+    rl_xy = raceline[:, 1:3]
+    cl_xy = centerline[:, :2]
+    # nearest centerline point for each raceline point (one-time, at init)
+    d2 = ((rl_xy[:, None, 0] - cl_xy[None, :, 0]) ** 2
+          + (rl_xy[:, None, 1] - cl_xy[None, :, 1]) ** 2)
+    idx = np.argmin(d2, axis=1)
+    # left-positive centerline normal via finite differences
+    dxy = np.gradient(cl_xy, axis=0)
+    tn = dxy / np.maximum(np.linalg.norm(dxy, axis=1, keepdims=True), 1e-9)
+    nrm = np.stack([-tn[:, 1], tn[:, 0]], axis=1)
+    cpt = cl_xy[idx]
+    npt = nrm[idx]
+    w_r = centerline[idx, 2]
+    w_l = centerline[idx, 3]
+    off = np.sum((rl_xy - cpt) * npt, axis=1)   # signed offset, left +
+    off = off * blend                            # 0=centerline, 1=full raceline
+    half = car_width / 2.0 + margin
+    off_c = np.clip(off, -(w_r - half), (w_l - half))
+    new_xy = cpt + off_c[:, None] * npt
+    dx = np.gradient(new_xy[:, 0])
+    dy = np.gradient(new_xy[:, 1])
+    psi = np.arctan2(dy, dx)
+    ds = np.sqrt(dx ** 2 + dy ** 2)
+    s = np.concatenate([[0.0], np.cumsum(ds)[:-1]])
+    dpsi = np.gradient(psi)
+    dpsi = np.arctan2(np.sin(dpsi), np.cos(dpsi))
+    kappa = dpsi / np.maximum(ds, 1e-6)
+    return np.column_stack([s, new_xy[:, 0], new_xy[:, 1], psi, kappa,
+                            raceline[:, 5], raceline[:, 6]])
+
+
+def build_pp_raceline_from_centerline(centerline, ref_vx=8.0):
+    cl = centerline
+    dx = np.gradient(cl[:, 0])
+    dy = np.gradient(cl[:, 1])
+    psi = np.arctan2(dy, dx)
+    ds = np.sqrt(dx**2 + dy**2)
+    s = np.concatenate([[0.0], np.cumsum(ds)[:-1]])
+    dpsi = np.gradient(psi)
+    dpsi = np.arctan2(np.sin(dpsi), np.cos(dpsi))
+    kappa = dpsi / np.maximum(ds, 1e-6)
+    return np.column_stack([s, cl[:, 0], cl[:, 1], psi, kappa,
+                            np.full(len(cl), ref_vx), np.zeros(len(cl))])
 
 
 class RLPPEnv(gym.Env):
@@ -94,8 +151,17 @@ class RLPPEnv(gym.Env):
         velocity_curriculum: bool = True,
         max_laps: int = 2,
         render_mode: str | None = None,
+        reward_overrides: dict | None = None,
+        pp_reference: str = "centerline",
+        pp_margin: float = 0.10,
+        pp_blend: float = 1.0,
     ):
         super().__init__()
+        self.pp_reference = pp_reference
+
+        self.reward_params = dict(REWARD_PARAMS)
+        if reward_overrides:
+            self.reward_params.update(reward_overrides)
 
         if tracks_dir is None:
             tracks_dir = os.path.join(_SCRIPT_DIR, "f1tenth_racetracks")
@@ -115,15 +181,27 @@ class RLPPEnv(gym.Env):
 
         self.raceline = load_raceline(track_dir, track_name)
         self.centerline = load_centerline(track_dir, track_name)
+        if pp_reference == "raceline":
+            self.pp_raceline = build_feasible_raceline(self.raceline, self.centerline,
+                                                       margin=pp_margin, blend=pp_blend)
+        else:
+            self.pp_raceline = build_pp_raceline_from_centerline(self.centerline)
 
-        self.raceline_s = self.raceline[:, 0]
+        self.real_rl_xy = np.ascontiguousarray(self.raceline[:, 1:3])
+        self.real_rl_psi = self.raceline[:, 3]
+        self.real_rl_s = self.raceline[:, 0]
+        self.real_rl_vx = self.raceline[:, 5]
+        self.real_total_s = self.real_rl_s[-1]
+
+        self.use_raceline_progress = self.reward_params["use_raceline_progress"]
+        self.raceline_s = self.pp_raceline[:, 0]
         self.total_s = self.raceline_s[-1]
 
         self.params = dict(VEHICLE_PARAMS)
         wheelbase = self.params["lf"] + self.params["lr"]
 
         self.pp = PurePursuitController(
-            self.raceline,
+            self.pp_raceline,
             self.centerline,
             lookahead_distance=lookahead_distance,
             wheelbase=wheelbase,
@@ -185,18 +263,30 @@ class RLPPEnv(gym.Env):
             [np.array([d, delta_psi, vx, vy, yaw_rate], dtype=np.float32), o_traj]
         )
 
+    def _get_real_rl_idx(self, px, py):
+        return int(np.argmin(
+            (self.real_rl_xy[:, 0] - px)**2 + (self.real_rl_xy[:, 1] - py)**2
+        ))
+
     def _compute_reward(self, px, py, theta, vx, closest_idx, collision):
-        current_s = self.raceline_s[closest_idx]
+        if self.use_raceline_progress:
+            rl_idx = self._get_real_rl_idx(px, py)
+            current_s = self.real_rl_s[rl_idx]
+            total_s = self.real_total_s
+        else:
+            current_s = self.raceline_s[closest_idx]
+            total_s = self.total_s
+
         prev_s = self._prev_s
         delta_s = current_s - prev_s
-        if delta_s < -self.total_s / 2:
-            delta_s += self.total_s
-        elif delta_s > self.total_s / 2:
-            delta_s -= self.total_s
+        if delta_s < -total_s / 2:
+            delta_s += total_s
+        elif delta_s > total_s / 2:
+            delta_s -= total_s
 
         self._cumulative_progress += delta_s
-        if self._cumulative_progress >= self.total_s:
-            self._cumulative_progress -= self.total_s
+        if self._cumulative_progress >= total_s:
+            self._cumulative_progress -= total_s
             self._lap_count += 1
 
         r_adv = delta_s / (self.vmax * self.sim_dt)
@@ -208,16 +298,29 @@ class RLPPEnv(gym.Env):
 
         r_dev = 0.0
         abs_d = abs(d)
-        if abs_d > REWARD_PARAMS["tau_dev"]:
-            r_dev = -REWARD_PARAMS["alpha_dev"] * abs_d / max(w_track, 0.1)
+        if abs_d > self.reward_params["tau_dev"]:
+            r_dev = -self.reward_params["alpha_dev"] * abs_d / max(w_track, 0.1)
 
         r_heading = 0.0
         abs_dpsi = abs(delta_psi)
-        if abs_dpsi > REWARD_PARAMS["tau_psi"]:
-            r_heading = -REWARD_PARAMS["alpha_heading"] * abs_dpsi / self.psi_max
+        if abs_dpsi > self.reward_params["tau_psi"]:
+            r_heading = -self.reward_params["alpha_heading"] * abs_dpsi / self.psi_max
 
         r_coll = -1.0 if collision else 0.0
-        r_tot = r_pos + r_pos * (r_dev + r_heading) + r_coll
+
+        r_raceline = 0.0
+        alpha_rl_reward = self.reward_params["alpha_raceline"]
+        if alpha_rl_reward > 0:
+            rl_idx = int(np.argmin(
+                (self.real_rl_xy[:, 0] - px)**2 + (self.real_rl_xy[:, 1] - py)**2
+            ))
+            ref_pos = self.real_rl_xy[rl_idx]
+            ref_psi = self.real_rl_psi[rl_idx]
+            err = np.array([px - ref_pos[0], py - ref_pos[1]])
+            d_rl = abs(-np.sin(ref_psi) * err[0] + np.cos(ref_psi) * err[1])
+            r_raceline = alpha_rl_reward * np.exp(-d_rl / 0.3)
+
+        r_tot = r_pos + r_pos * (r_dev + r_heading) + r_raceline + r_coll
         return float(r_tot)
 
     def reset(self, seed=None, options=None):
@@ -228,10 +331,10 @@ class RLPPEnv(gym.Env):
         if self.velocity_curriculum and len(self._episode_velocities) > 0:
             self._avg_velocity = float(np.mean(self._episode_velocities))
 
-        start_idx = self.np_random.integers(0, len(self.raceline))
-        start_x = self.raceline[start_idx, 1]
-        start_y = self.raceline[start_idx, 2]
-        start_psi = self.raceline[start_idx, 3]
+        start_idx = self.np_random.integers(0, len(self.pp_raceline))
+        start_x = self.pp_raceline[start_idx, 1]
+        start_y = self.pp_raceline[start_idx, 2]
+        start_psi = self.pp_raceline[start_idx, 3]
 
         poses = np.array([[start_x, start_y, start_psi]])
         self.sim.reset(poses)
@@ -247,7 +350,10 @@ class RLPPEnv(gym.Env):
         px, py, theta, vx, vy, yaw_rate, collision = self._extract_state(obs_dict)
 
         self._closest_idx = self.pp.find_closest_index(np.array([px, py]))
-        self._prev_s = self.raceline_s[self._closest_idx]
+        if self.use_raceline_progress:
+            self._prev_s = self.real_rl_s[self._get_real_rl_idx(px, py)]
+        else:
+            self._prev_s = self.raceline_s[self._closest_idx]
         self._cumulative_progress = 0.0
         self._lap_count = 0
         self._last_pos = np.array([px, py])
@@ -279,7 +385,10 @@ class RLPPEnv(gym.Env):
 
         self._last_pos = np.array([px, py])
         self._last_heading = theta
-        self._prev_s = self.raceline_s[self._closest_idx]
+        if self.use_raceline_progress:
+            self._prev_s = self.real_rl_s[self._get_real_rl_idx(px, py)]
+        else:
+            self._prev_s = self.raceline_s[self._closest_idx]
         self._episode_velocities.append(vx)
 
         rl_obs = self._build_obs(px, py, theta, vx, vy, yaw_rate, self._closest_idx)

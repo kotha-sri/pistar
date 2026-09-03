@@ -1,0 +1,9 @@
+# Core
+gymnasium>=0.29.0
+numpy>=1.24.0,<2.0.0      # gym-donkeycar has numpy 2.x issues
+torch>=2.0.0
+Pillow>=9.0.0
+
+# Donkey Car simulator wrapper (PyPI version is stale, install from source)
+git+https://github.com/tawnkramer/gym-donkeycar
+gym-donkeycar

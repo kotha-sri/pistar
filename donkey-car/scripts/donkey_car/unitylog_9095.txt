@@ -1,0 +1,222 @@
+Mono path[0] = 'C:/Users/kotha/pistar/donkey-car/scripts/donkey_car/DonkeySimWin/donkey_sim_Data/Managed'
+Mono config path = 'C:/Users/kotha/pistar/donkey-car/scripts/donkey_car/DonkeySimWin/MonoBleedingEdge/etc'
+Initialize engine version: 2020.3.49f1 (18249dd5551b)
+[Subsystems] Discovering subsystems at path C:/Users/kotha/pistar/donkey-car/scripts/donkey_car/DonkeySimWin/donkey_sim_Data/UnitySubsystems
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Begin MonoManager ReloadAssembly
+- Completed reload, in  0.088 seconds
+ERROR: Shader Sprites/Default shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+Microsoft Media Foundation video decoding to texture disabled: graphics device is Null, only Direct3D 11 and Direct3D 12 (only on desktop) are supported for hardware-accelerated video decoding.
+ERROR: Shader Sprites/Mask shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader GUI/Text Shader shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Legacy Shaders/VertexLit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Standard' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Standard shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Standard' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+UnloadTime: 0.475400 ms
+SDSandbox Server starting.
+Server Listening on: 0.0.0.0:9095
+Waiting for a connection...
+SDSandbox Server starting.
+SocketException: Address already in use
+  at System.Net.Sockets.Socket.Bind (System.Net.EndPoint localEP) [0x00043] in <0306c7fe0af44cadbd08d1c628fe991d>:0 
+  at tk.TcpServer.Bind (System.String ip, System.Int32 port) [0x00022] in <a2c5c2f6c1574e1c839a565864375303>:0 
+  at tk.TcpServer.Run (System.String ip, System.Int32 port) [0x00000] in <a2c5c2f6c1574e1c839a565864375303>:0 
+  at SandboxServer.Start () [0x0005e] in <a2c5c2f6c1574e1c839a565864375303>:0 
+
+ERROR: Shader UI/Default shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+Waiting for a connection...
+client connected.
+generated_track
+loaded scene
+Unloading 8 Unused Serialized files (Serialized files now loaded: 0)
+ERROR: Shader Legacy Shaders/Transparent/Cutout/VertexLit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Projector/Multiply shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Nature/SpeedTree Billboard' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Nature/SpeedTree Billboard shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Nature/SpeedTree Billboard' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+WARNING: Shader Unsupported: 'Nature/SpeedTree' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Nature/SpeedTree shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Nature/SpeedTree' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+UnloadTime: 7.076000 ms
+JustOne removing instance.MainThDisp
+JustOne removing instance.SandboxServer
+loading: racePi2
+JustOne removing instance.SandboxPrivateAPIServer
+Added timer
+car loaded.
+
+Unloading 34 unused Assets to reduce memory usage. Loaded Objects now: 3253.
+Total: 1.385700 ms (FindLiveObjects: 0.189900 ms CreateObjectMapping: 0.064400 ms MarkObjects: 1.086700 ms  DeleteObjects: 0.044300 ms)
+
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+Waiting for a connection...
+client connected.
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+Waiting for a connection...
+client connected.
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car
+client connected.
+Waiting for a connection...
+Added timer
+car loaded.
+No delegates for msg type: connected
+No delegates for msg type: load_scene
+Exception on recv. Connection dropped.
+removed timer
+removed split screen camera
+Removed car

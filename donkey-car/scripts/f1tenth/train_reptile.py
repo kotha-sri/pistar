@@ -35,6 +35,7 @@ import argparse
 import gc
 import os
 import shutil
+import sys
 import time
 import pickle
 
@@ -149,11 +150,14 @@ def create_model(env, args):
     )
 
 
-def evaluate_on_track(model, track_name, tracks_dir, n_laps=10, alpha_rl=0.55):
+def evaluate_on_track(model, track_name, tracks_dir, n_laps=10, alpha_rl=0.55,
+                      action_scaling=(0.05, 1.0), pp_reference="centerline",
+                      pp_blend=1.0):
     env = RLPPEnv(
         track_name=track_name, tracks_dir=tracks_dir,
-        alpha_rl=alpha_rl, velocity_gain=0.5,
+        alpha_rl=alpha_rl, velocity_gain=0.5, action_scaling=action_scaling,
         mu_noise_std=0.0, velocity_curriculum=False, max_laps=n_laps,
+        pp_reference=pp_reference, pp_blend=pp_blend,
     )
     lap_times = []
     for _ in range(n_laps):
@@ -177,13 +181,13 @@ def evaluate_on_track(model, track_name, tracks_dir, n_laps=10, alpha_rl=0.55):
             if cumul_s >= env.total_s and steps > 100:
                 lap_times.append(steps * env.controller_dt)
                 break
-            if terminated or truncated or steps > 100000:
+            if terminated or truncated or steps > 20000:
                 break
     return lap_times
 
 
 def evaluate_meta_adaptation(meta_params, track_name, tracks_dir, args,
-                              adapt_steps_list=None):
+                              adapt_steps_list=None, action_scaling=(0.05, 1.0)):
     """Evaluate meta-init by fine-tuning for various step counts."""
     if adapt_steps_list is None:
         adapt_steps_list = [0, 4000, 10000]
@@ -193,6 +197,9 @@ def evaluate_meta_adaptation(meta_params, track_name, tracks_dir, args,
         velocity_gain=0.5,
         mu_noise_std=0.15,
         velocity_curriculum=True,
+        action_scaling=action_scaling,
+        pp_reference=args.pp_reference,
+        pp_blend=args.pp_blend,
     )
 
     results = {}
@@ -206,7 +213,10 @@ def evaluate_meta_adaptation(meta_params, track_name, tracks_dir, args,
         if adapt_steps > 0:
             model.learn(total_timesteps=adapt_steps)
 
-        laps = evaluate_on_track(model, track_name, tracks_dir)
+        laps = evaluate_on_track(model, track_name, tracks_dir,
+                                action_scaling=action_scaling,
+                                pp_reference=args.pp_reference,
+                                pp_blend=args.pp_blend)
         results[adapt_steps] = {
             "completed": len(laps),
             "mean_time": np.mean(laps) if laps else None,
@@ -255,6 +265,20 @@ def main():
     parser.add_argument("--tag", default="reptile_v3")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--resume", default=None, help="Path to meta checkpoint to resume from")
+    parser.add_argument("--reward-alpha-raceline", type=float, default=0.0,
+                        help="Raceline proximity reward weight (0=off)")
+    parser.add_argument("--reward-use-raceline-progress", action="store_true",
+                        help="Track progress along real raceline instead of centerline")
+    parser.add_argument("--reward-alpha-dev", type=float, default=1.0,
+                        help="Centerline deviation penalty weight (default 1.0)")
+    parser.add_argument("--action-scaling", type=float, nargs=2, default=[0.05, 1.0],
+                        metavar=("STEER", "VEL"),
+                        help="Action scaling for [steering, velocity] residuals")
+    parser.add_argument("--pp-reference", default="centerline",
+                        choices=["centerline", "raceline"],
+                        help="Path PP tracks: centerline (old) or feasible raceline")
+    parser.add_argument("--pp-blend", type=float, default=1.0,
+                        help="centerline(0)->raceline(1) blend when pp-reference=raceline")
     args = parser.parse_args()
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -281,13 +305,33 @@ def main():
     print(f"  Held-out eval tracks: {HELD_OUT_TRACKS}")
     if args.include_generated:
         print(f"  Generated tracks included: {len(gen_tracks)}")
+    if args.reward_alpha_raceline > 0:
+        print(f"  Raceline reward: alpha={args.reward_alpha_raceline}")
+    if args.reward_use_raceline_progress:
+        print(f"  Using raceline progress tracking")
+
+    reward_overrides = {}
+    if args.reward_alpha_raceline > 0:
+        reward_overrides["alpha_raceline"] = args.reward_alpha_raceline
+    if args.reward_use_raceline_progress:
+        reward_overrides["use_raceline_progress"] = True
+    if args.reward_alpha_dev != 1.0:
+        reward_overrides["alpha_dev"] = args.reward_alpha_dev
+
+    action_scaling = tuple(args.action_scaling)
+    print(f"  Action scaling: steer={action_scaling[0]}, vel={action_scaling[1]}")
 
     env_kwargs = dict(
         alpha_rl=1.0,
         velocity_gain=0.5,
         mu_noise_std=0.15,
         velocity_curriculum=True,
+        action_scaling=action_scaling,
+        reward_overrides=reward_overrides if reward_overrides else None,
+        pp_reference=args.pp_reference,
+        pp_blend=args.pp_blend,
     )
+    print(f"  PP reference: {args.pp_reference} (blend={args.pp_blend})")
 
     if args.resume:
         print(f"\nResuming from {args.resume}")
@@ -384,8 +428,9 @@ def main():
         del inner_model
         gc.collect()
 
-        # Periodically clear JAX JIT cache to prevent unbounded memory growth.
-        if (meta_iter + 1) % 50 == 0:
+        del adapted_params
+        gc.collect()
+        if (meta_iter + 1) % 10 == 0:
             jax.clear_caches()
 
         iter_time = time.time() - iter_t0
@@ -397,10 +442,17 @@ def main():
               f"track={track_name:<20s} eps={epsilon:.3f} "
               f"inner_rew={rew_str} "
               f"iter={iter_time:.0f}s eta={eta/60:.0f}m")
+        sys.stdout.flush()
 
+        params_np = jax.tree.map(lambda x: np.array(x), meta_params)
+        os.makedirs(save_dir, exist_ok=True)
+        latest = os.path.join(save_dir, "meta_params_latest.pkl")
+        with open(latest, "wb") as f:
+            pickle.dump(params_np, f)
         if (meta_iter + 1) % args.save_every == 0:
             path = save_meta_checkpoint(meta_params, meta_iter + 1, save_dir)
             print(f"    Saved checkpoint: {path}")
+            sys.stdout.flush()
 
         if (meta_iter + 1) % args.eval_every == 0:
             print(f"\n  === Evaluation at meta-iter {meta_iter+1} ===")
@@ -409,6 +461,7 @@ def main():
                 results = evaluate_meta_adaptation(
                     meta_params, eval_track, tracks_dir, args,
                     adapt_steps_list=[0, 4000, 10000],
+                    action_scaling=action_scaling,
                 )
                 print(f"    {eval_track}:")
                 for steps, res in sorted(results.items()):
@@ -423,6 +476,7 @@ def main():
                     results = evaluate_meta_adaptation(
                         meta_params, check_track, tracks_dir, args,
                         adapt_steps_list=[0, 4000],
+                        action_scaling=action_scaling,
                     )
                     print(f"    {check_track} (train):")
                     for steps, res in sorted(results.items()):
@@ -449,6 +503,7 @@ def main():
         results = evaluate_meta_adaptation(
             meta_params, eval_track, tracks_dir, args,
             adapt_steps_list=[0, 2000, 4000, 10000, 25000],
+            action_scaling=action_scaling,
         )
         print(f"\n  {eval_track}:")
         for steps, res in sorted(results.items()):

@@ -1,0 +1,1085 @@
+[Client] Connected to Donkey Sim at 127.0.0.1:9091
+[Client] Listening for sim messages...
+[Sim] Car loaded — ready to drive.
+[Client] Loading scene: generated_track
+[Main] Waiting for first telemetry packet...
+cte= -4.27  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.27) — resetting car...
+[Client] Car reset to start.
+cte= -4.27  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.27) — resetting car...
+[Client] Car reset to start.
+cte= -4.27  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.27) — resetting car...
+[Client] Car reset to start.
+cte= -4.27  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.27) — resetting car...
+[Client] Car reset to start.
+cte= -4.27  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.27) — resetting car...
+
+CTE + PID follower running. Press Ctrl-C to stop, Ctrl-R to reset car.
+Hot-reload enabled: save CONFIG in main.py or path_follower.py to update live.
+
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.38  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.02  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.28  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.04  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.23  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.07  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.33  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.06  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.00  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.38  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.02  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.38  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.02  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.38  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.02  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.38  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.02  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.38  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.02  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.01  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.38  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.03  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.
+cte= -4.50  speed= 0.02  hit=none
+
+[Main] Car off track (cte=-4.50) — resetting car...
+[Client] Car reset to start.

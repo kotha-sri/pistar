@@ -134,11 +134,101 @@ Key observations:
 - [x] `discover_valid_tracks()` — validates raceline/centerline format, filters 10 bad generated tracks
 - [x] Training launched: 200 meta-iterations × 20K inner steps × 4 envs, ~80s/iter
 - [x] 68 training tracks (17 real + 51 valid generated), Austin/Monza/Silverstone held out
-- [ ] **Evaluate zero-shot on held-out tracks (Austin, Silverstone, Monza)**
-- [ ] **Evaluate few-lap adaptation (0, 4K, 10K steps on held-out tracks)**
+- [x] **Evaluate zero-shot on held-out tracks (Austin, Silverstone, Monza)**
+- [x] **Evaluate few-lap adaptation (0, 4K, 10K steps on held-out tracks)**
 - [ ] Track encoder: context vector from first few observations for rapid adaptation
-- [ ] Same mechanism handles new tracks AND new vehicles → DonkeySim and hardware become cheap
-- [ ] **Exit gate:** unseen track, competent driving within 5 laps of experience (~10K steps)
+- [x] **Exit gate:** unseen track, competent driving within 5 laps (~4K steps) — **met on Austin & Silverstone** (10/10 laps, 8–11% faster than PP). Monza completes at 4K but is unstable across checkpoints/α_rl (see notes).
+
+#### Held-Out Results (2026-08-20, Reptile v3 best checkpoint)
+
+| Track       | PP-only  | 0-step RL | 4K-adapted | Delta vs PP |
+|-------------|----------|-----------|------------|-------------|
+| Austin      | 106.5s   | 105.0s (10/10) | 95.6s (10/10) | −10.9s |
+| Monza       | 112.2s   | 0/10 (fails)   | 100.8s (10/10) | −11.3s |
+| Silverstone | 115.3s   | 119.2s (10/10) | 106.3s (10/10) | −8.9s  |
+
+4K-adapted Reptile beats PP by 8–10% on every held-out track. Exit gate met: competent driving within ~2 laps of experience.
+
+### Raceline Optimization (launched 2026-08-20)
+
+**Problem:** current policy tracks the centerline well (|d_cl|≈0.08m) but is ~0.70m off the optimal raceline. PP follows a synthetic centerline-based path; reward penalizes centerline deviation. The RL residual has no incentive to approach the racing line.
+
+**Approach:** add raceline proximity reward `r_raceline = α * exp(-d_rl / 0.3)` and optionally track progress along the real raceline.
+
+- [x] `eval_ceiling.py` — sweep adaptation steps (0–40K) × α_rl (0.55–1.0) with |d_cl| and |d_rl| metrics
+- [x] `residual_env.py` — added `reward_overrides` param, `alpha_raceline` reward, `use_raceline_progress` option
+- [x] `train_reptile.py` — added `--reward-alpha-raceline`, `--reward-use-raceline-progress`, `--action-scaling` args
+- [x] Raceline reward A/B test: proximity reward DNFs (raceline clips walls), progress-based gives modest 1-2cm improvement
+- [x] **Root cause identified:** action_scaling=(0.05, 1.0) physically limits the residual — can't reach raceline 0.64m from centerline, capped at 60% of optimal velocity
+- [x] `eval_action_scaling.py` — sweep of steering/velocity scaling: vel_s=2.0 gives 12% speed gain (81.8s vs 89.7s), steer=0.10 reduces |d_rl| by 2-3cm
+- [x] **Key insight:** meta-init trained with small scaling can't reliably adapt to larger scaling in 10-40K steps — need to retrain
+- [x] **Reptile v5 (2026-08-20/21):** action_scaling=(0.10, 2.0), 200 meta-iterations — **INCONCLUSIVE.** Larger action budget gave more expressive residuals but destabilized training: completion oscillated wildly across checkpoints, Monza failed on most (0/10 on final iter-200 ckpt). Best was iter-25 (20/30 held-out laps), never surpassed.
+- [x] **Final |d_rl| eval (v3_best vs v5):** Austin 0.6365→0.6059m (−4.8% zero-shot, but v5 unstable at 4K); Monza 0.6220→0.6211m (−0.1%, v5_i200 DNF); Silverstone no reliable gain. **Verdict: doubled action_scaling is not the fix — instability negates the marginal |d_rl| gains.**
+
+#### α_rl Sweep (2026-08-21, v3_best) — `eval_alpha_sweep.py`
+
+Swept residual blend α_rl ∈ {0.55, 0.70, 0.80, 0.90, 1.0} at 4K & 10K adapt. **α_rl=0.70 is the best-completing point** — beats the 0.55 default on lap time on all three tracks while holding 10/10. Higher α (0.9–1.0) improves |d_rl| slightly but crashes at 4K adapt (only survives with 10K). Gains are marginal (1–2%): the ~0.59–0.64m deviation is a **structural limit of centerline-trained reward**, not something α_rl can tune away.
+
+#### Velocity Optimization (2026-08-21, v3_best) — `eval_velocity_sweep.py`
+
+Swept `velocity_gain` (α_v) ∈ {0.3, 0.5, 0.7, 0.9} × α_rl ∈ {0.55, 0.70}, adapt & eval with matched gain, 4K adapt.
+
+| gain | top speed | Austin | Monza | Silverstone |
+|------|-----------|--------|-------|-------------|
+| 0.3  | 2.9 m/s   | 10/10, 137–144s (slow) | 10/10, 150–156s (slow) | **0/10 DNF** |
+| **0.5**  | **4.5–4.7 m/s** | **10/10, 93–96s** | **10/10, 98–101s** | **10/10, 105–106s** |
+| 0.7  | —         | 0/10 DNF (crash) | 0/10 DNF | 0/10 DNF |
+| 0.9  | —         | 0/10 DNF | 0/10 DNF | 0/10 DNF |
+
+**Answer to the over-braking question: PP is NOT over-braking at the default gain=0.5.** Lowering to 0.3 *induces* over-braking (2.9 m/s, +40–55% lap time, no |d_rl| benefit); raising to 0.7+ makes the residual policy crash immediately (DNF in 3–44s). The policy tops out at 4.5–4.7 m/s — **well below the vmax=8.0 ceiling**, so the velocity-curriculum ceiling is *not* the binding constraint; the residual policy is tightly coupled to the gain=0.5 base it was meta-trained on. Velocity headroom to the optimal (7+ m/s) can only be unlocked by retraining, not by tuning α_v.
+
+#### Combined recommended operating point (v3_best, 4K adapt)
+
+| Track | Best (gain, α_rl) | Lap time | \|d_rl\| | vs default (0.5, 0.55) |
+|-------|-------------------|----------|--------|------------------------|
+| Austin      | (0.5, 0.70) | 93.27s  | 0.6309m | −2.33s (−2.4%) |
+| Monza       | (0.5, 0.70) | 98.22s  | 0.6378m | −2.62s (−2.6%) |
+| Silverstone | (0.5, 0.70) | 104.52s | 0.5985m | −1.76s (−1.7%) |
+
+**Lock-in: gain=0.5, α_rl=0.70** — uniform winner, ~2% faster than the current default with 10/10 completion preserved on all three held-out tracks.
+
+- [x] **Reptile v6 (2026-08-23/24):** raceline-referenced reward (α_raceline=1.5, α_dev=0.3, raceline-progress), action_scaling=(0.05, 1.0). **The structural fix worked — first meaningful |d_rl| gain with completion intact.**
+
+#### v6 vs v3 |d_rl| (2026-08-24, best-completing config, gain=0.5, α_rl=0.70) — `eval_v6.py`
+
+| Track | v3_best (10/10) | v6_best (10/10) | Gap closed |
+|-------|-----------------|-----------------|------------|
+| Austin      | 0.6312m (4K)  | **0.6068m** (10K) | **−3.9%** |
+| Monza       | 0.6378m (4K)* | **0.5945m** (10K) | **−6.8%** |
+| Silverstone | 0.5887m (10K) | **0.5656m** (10K) | **−3.9%** |
+
+\* v3 completes Monza only at 4K (10K DNFs); v6 completes Monza at **both** 4K and 10K.
+
+**First time |d_rl| dropped on all three held-out tracks with 10/10 completion maintained everywhere.** The raceline reward broke through the ~0.59–0.64m centerline-reward floor that α_rl and velocity sweeps could not.
+
+**Two caveats:**
+1. **Speed regressed** — v6 tracks the raceline *path* tightly but not its *speed profile* (Austin 10K 118s vs v3 92s). action_scaling=(0.05,1.0) still caps velocity ~4.7 m/s vs optimal 7+ m/s. v6 nails *where*, not *how fast*.
+2. **Meta-training is unstable** — completion oscillates and the final iter-200 checkpoint fully collapses (0/30, like v5). All value is in the **iter-25 `meta_params_best.pkl`** (30/30); best-checkpoint-saving is what preserved it. Cutting α_dev to 0.3 destabilizes the meta-init.
+
+- [x] **Reptile v7 (2026-08-24/25):** v6 raceline reward + v5 velocity budget action_scaling=(0.10, 2.0), α_dev raised to 0.6, resumed from v6_best. **Mixed verdict — record raceline accuracy, but completion collapsed.**
+
+#### v7 vs v6 vs v3 |d_rl| (2026-08-25, gain=0.5, α_rl=0.70) — `eval_v7.py`
+
+Best |d_rl| ever recorded, but only in isolated checkpoint/adapt cells — not robustly:
+
+| Track | Best v7 10/10 cell | \|d_rl\| | Time | vs v6 best |
+|-------|--------------------|--------|------|------------|
+| Austin      | i50, zero-shot | **0.5364m** | 160s (slow) | −9% \|d_rl\|, but +55s |
+| Monza       | i50, zero-shot | 0.6214m | 169s (slow) | worse than v6 |
+| Silverstone | i100, 4K       | **0.5574m** | **100s** | −1% \|d_rl\|, fast — **clean win** |
+
+**What v7 proved:** the larger action budget + raceline reward can pull *tighter* to the line than anything before (Austin zero-shot 0.5364m, best in project). Silverstone i100 4K is a genuine fast+tight+10/10 point (0.5574m @ 100s).
+
+**Why it's not the answer:** completion collapsed — v7's training-eval best is only **10/30 total laps** (worst of any version; v6/v3 hit 30/30). The (0.10, 2.0) action budget destabilizes *adaptation* — most 4K/10K runs DNF, and no single checkpoint holds all three tracks. Raising α_dev to 0.6 did **not** fix the instability; the larger action scale dominates. This re-confirms the v5 lesson: **doubled action_scaling is fundamentally incompatible with robust few-lap adaptation, even with raceline reward.**
+
+**Standing conclusion: v6 remains the winning config** — the only version that improved |d_rl| on all three tracks while holding 10/10. v7 is a research data point (peak accuracy is reachable) not a deployable policy.
+
+- [ ] **v8 (next candidate):** keep v6's small action budget (0.05, 1.0) but add a modest *velocity-only* scale bump (e.g. (0.05, 1.4)) to recover lap time without the steering instability that (0.10, ·) causes. OR: stabilize meta-training directly (meta-update clipping / lower inner-LR) so a single checkpoint holds all tracks. Velocity instability is a steering-axis problem — isolate it.
 
 ---
 

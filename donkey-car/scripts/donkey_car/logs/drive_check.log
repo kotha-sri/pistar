@@ -1,0 +1,21 @@
+[Client] Connected to Donkey Sim at 127.0.0.1:9091
+[Client] Listening for sim messages...
+[Sim] Car loaded — ready to drive.
+[Client] Loading scene: generated_track
+[Drive] Trained residual loaded. Racing — Ctrl-C to stop.
+
+[Client] Car reset to start.
+speed= 1.19  cte=  0.00  residual_applied=[-0.011  0.935]
+speed= 1.72  cte=  0.00  residual_applied=[-0.001  0.308]
+speed= 1.83  cte=  0.00  residual_applied=[0.006 0.181]
+speed= 1.85  cte= -0.00  residual_applied=[0.019 0.155]
+speed= 1.73  cte= -0.68  residual_applied=[1.    0.217]
+speed= 1.76  cte=  0.07  residual_applied=[-0.215  0.273]
+speed= 1.72  cte= -0.56  residual_applied=[1.    0.241]
+speed= 1.74  cte=  0.50  residual_applied=[-0.996  0.281]
+speed= 1.71  cte= -0.53  residual_applied=[1.   0.26]
+speed= 1.74  cte=  0.59  residual_applied=[-0.997  0.279]
+speed= 1.75  cte= -2.60  residual_applied=[1.    0.294]
+speed= 1.75  cte= -1.47  residual_applied=[1.    0.238]
+speed= 1.77  cte=  2.08  residual_applied=[-1.     0.317]
+speed= 1.77  cte=  0.08  residual_applied=[-0.997  0.266]
