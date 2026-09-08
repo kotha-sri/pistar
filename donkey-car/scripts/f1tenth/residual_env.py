@@ -22,6 +22,7 @@ if _SIM_DIR not in sys.path:
 
 from f110_gym.envs.base_classes import Simulator, Integrator
 from pure_pursuit import PurePursuitController
+from fault_injection import FaultSet
 
 
 # Vehicle params from Table II of the paper
@@ -155,9 +156,21 @@ class RLPPEnv(gym.Env):
         pp_reference: str = "centerline",
         pp_margin: float = 0.10,
         pp_blend: float = 1.0,
+        faults=None,
     ):
         super().__init__()
         self.pp_reference = pp_reference
+
+        # Fault injection (Phase 0 of the resilient-adaptation pivot). None =>
+        # behavior is byte-identical to the original RLPP env.
+        if faults is None:
+            self.faults = None
+        elif isinstance(faults, FaultSet):
+            self.faults = faults
+        else:
+            self.faults = FaultSet(faults)
+        self._fault_base_params = None
+        self._t = 0
 
         self.reward_params = dict(REWARD_PARAMS)
         if reward_overrides:
@@ -328,6 +341,14 @@ class RLPPEnv(gym.Env):
 
         self._randomize_friction()
 
+        # Apply fault effects on top of (overriding) the nominal/random params.
+        self._t = 0
+        if self.faults is not None:
+            self.faults.reset(self)
+            self._fault_base_params = dict(self.params)
+            fp = self.faults.params(self._fault_base_params)
+            self.sim.update_params(fp)
+
         if self.velocity_curriculum and len(self._episode_velocities) > 0:
             self._avg_velocity = float(np.mean(self._episode_velocities))
 
@@ -363,10 +384,25 @@ class RLPPEnv(gym.Env):
         return self._build_obs(px, py, theta, vx, vy, yaw_rate, self._closest_idx), {}
 
     def step(self, action: np.ndarray):
+        self._t += 1
+
+        # Time-varying in-model faults (e.g. gradual friction decay).
+        if self.faults is not None:
+            dp = self.faults.step_params(self._fault_base_params, self._t)
+            if dp is not None:
+                self.sim.update_params(dp)
+
         pp_action, _ = self.pp.get_action(self._last_pos, self._last_heading)
 
         residual = action * self.action_scaling * self.alpha_rl
         combined = pp_action + residual
+
+        # Out-of-model actuator faults act on the [steer, vel] command, before
+        # the physical steering/velocity limits are enforced.
+        if self.faults is not None:
+            cs, cv = self.faults.command(float(combined[0]), float(combined[1]), self._t)
+            combined = np.array([cs, cv], dtype=np.float32)
+
         combined[0] = np.clip(combined[0], self.params["s_min"], self.params["s_max"])
         combined[1] = np.clip(combined[1], 0.0, self.vmax)
 
@@ -392,6 +428,10 @@ class RLPPEnv(gym.Env):
         self._episode_velocities.append(vx)
 
         rl_obs = self._build_obs(px, py, theta, vx, vy, yaw_rate, self._closest_idx)
+
+        # Out-of-model sensor faults act on the observation the policy sees.
+        if self.faults is not None:
+            rl_obs = self.faults.observation(rl_obs, self._t)
 
         terminated = collision
         truncated = self._lap_count >= self.max_laps

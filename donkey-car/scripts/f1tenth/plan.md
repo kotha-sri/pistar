@@ -1,3 +1,8 @@
+> ⚠️ **SUPERSEDED (2026-09-08).** The project has pivoted from lap-time racing RL to **resilient
+> fault adaptation** — see [`fault_adaptation_plan.md`](fault_adaptation_plan.md), the active
+> charter. This file is retained for history: the RLPP replication, Reptile meta-learning, and the
+> raceline-reference fix are the groundwork the pivot reuses.
+
 # RLPP Replication & Transfer Plan
 
 **Goal:** Wall-clock efficient self-supervised RL for autonomous racing. Learn new tracks with limited, real-time computation.

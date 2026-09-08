@@ -1,0 +1,137 @@
+{
+  "track": "Spielberg",
+  "config": {
+    "alpha_rl": 0.0,
+    "velocity_gain": 0.5,
+    "mu_noise_std": 0.0,
+    "velocity_curriculum": false,
+    "pp_reference": "centerline"
+  },
+  "baseline": {
+    "steps": 8000,
+    "crashed": false,
+    "crash_step": null,
+    "laps_completed": 0,
+    "progress_frac": 0.9258185824474412,
+    "mean_abs_dev": 0.026897151500649075,
+    "max_abs_dev": 0.5743637657653095,
+    "final_vx": 3.9999882533660305
+  },
+  "headline": {
+    "friction_drop": {
+      "mechanism": "worn tires / dust / wet or polished surface -> lower tire-road mu",
+      "steps": 7099,
+      "crashed": true,
+      "crash_step": 7099,
+      "laps_completed": 0,
+      "progress_frac": 0.8144967475623275,
+      "mean_abs_dev": 0.07426966014491097,
+      "max_abs_dev": 0.8644644652738811,
+      "final_vx": 0.0
+    },
+    "steering_bias": {
+      "mechanism": "misaligned/loose steering linkage or servo trim -> constant additive steering offset",
+      "steps": 8000,
+      "crashed": false,
+      "crash_step": null,
+      "laps_completed": 0,
+      "progress_frac": 0.9246592623905164,
+      "mean_abs_dev": 0.11828280195183274,
+      "max_abs_dev": 0.5932986295608959,
+      "final_vx": 3.999999999444657
+    },
+    "actuator_latency": {
+      "mechanism": "VESC/servo command latency beyond nominal -> control applied several control-steps late",
+      "steps": 8000,
+      "crashed": false,
+      "crash_step": null,
+      "laps_completed": 0,
+      "progress_frac": 0.9234998879682988,
+      "mean_abs_dev": 0.027030642929125086,
+      "max_abs_dev": 0.614116281148987,
+      "final_vx": 3.999081652907453
+    }
+  },
+  "sweep": {
+    "friction_drop": {
+      "severities": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "progress_frac": [
+        0.9258185824474412,
+        0.9234998879682988,
+        0.8168257475023332,
+        0.5966903637818133,
+        0.005708412561577051
+      ]
+    },
+    "steering_bias": {
+      "severities": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "progress_frac": [
+        0.9258185824474412,
+        0.9246592623905164,
+        0.9246592623905164,
+        0.9234998879682988,
+        0.922340457199968
+      ]
+    },
+    "actuator_latency": {
+      "severities": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "progress_frac": [
+        0.9258185824474412,
+        0.9246592623905164,
+        0.9234998879682988,
+        0.922340457199968,
+        0.4158802698180875
+      ]
+    },
+    "steering_loe": {
+      "severities": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "progress_frac": [
+        0.9258185824474412,
+        0.9234998879682988,
+        0.9200214295877271,
+        0.5978658623081854,
+        0.005708412561577051
+      ]
+    },
+    "tire_stiffness": {
+      "severities": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "progress_frac": [
+        0.9258185824474412,
+        0.9234998879682988,
+        0.9211809701717542,
+        0.8134351395804378,
+        0.006879313050068626
+      ]
+    }
+  }
+}

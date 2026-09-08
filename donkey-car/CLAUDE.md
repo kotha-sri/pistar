@@ -24,5 +24,13 @@ nohup ~/rlpp/run_train.sh > ~/rlpp/train.log 2>&1 &
 
 ## Current Work
 
-Replicating RLPP paper (arXiv 2501.17311v2) — residual RL + Pure Pursuit on F1TENTH.
-See `scripts/f1tenth/plan.md` for the full roadmap.
+**Pivoted (2026-09-08) to resilient fault adaptation.** The RLPP replication (residual RL + Pure
+Pursuit on F1TENTH, arXiv 2501.17311v2) is now the reusable groundwork, not the goal. New north
+star: online, self-supervised, safe adaptation to **out-of-model faults** (steering bias, actuator
+loss-of-effectiveness/latency, low-grip patch, etc.) that classical adaptive control / sysID cannot
+handle. Racing/F1TENTH is the fault-injectable testbed.
+
+- **Active charter:** `scripts/f1tenth/fault_adaptation_plan.md` (supersedes `plan.md`, kept for history).
+- **Phase 0 DONE:** `fault_injection.py` + `residual_env.py` (`faults=` kwarg) + `demo_fault_injection.py`
+  (`python demo_fault_injection.py --track Spielberg`).
+- Next: Phase A/B — fault taxonomy build-out + `eval_fault_matrix.py` (the in-model vs out-of-model crossover).
