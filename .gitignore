@@ -1,0 +1,6 @@
+# Large Donkey simulator binaries and model archives (not needed for current work)
+donkey-car/scripts/donkey_car/DonkeySimWin/
+donkey-car/scripts/donkey_car/.models/
+donkey-car/scripts/donkey_ppo_model.zip
+*.resS
+donkey_ppo_model.zip
