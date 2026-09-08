@@ -202,12 +202,27 @@ profile. The full crossover still needs the ADAPTIVE baselines (adaptive-MPC/sys
 LoE/latency/drag; mass and (for PP) bias are milder — worth checking whether a higher-fidelity
 actuator model sharpens them.
 
-### Phase C — Meta-adaptation over faults
-**New** `train_reptile_faults.py` (fork of `train_reptile.py`): swap the task distribution from
-*tracks* to *faults*; reuse snapshot/interpolate/warm-start/eval. **New** `fault_distribution.py`
-(analog of `multi_track_env.py`): sample a fault + severity per episode; hold out never-seen fault
-types for OOD eval. **Optional** `adaptation_module.py`: RMA-style latent encoder from recent
-history. **Exit gate:** recovers held-out in-distribution faults in ≤ a few laps; honest OOD number.
+### Phase C — Meta-adaptation over faults — SCAFFOLDED + GPU-verified (2026-09-08)
+**New** `fault_distribution.py`: task = (track, fault_type, severity); `TRAIN_FAULTS` (8 types),
+`HELD_OUT_FAULTS` (3 never-seen types for OOD), severity band (0.2, 0.6), `sample_task`,
+`make_fault_env_fn`. **New** `train_reptile_faults.py`: forks the Reptile mechanics from
+`train_reptile.py` (imports snapshot/load/interpolate/create_model/checkpointing directly) and
+meta-learns an init that adapts to any *fault* in a few laps; warm-starts a clean residual, then
+each meta-iteration samples a fault task, inner-adapts, Reptile-interpolates; eval reports recovery
+at 0/2K/4K adapt steps on held-out in-distribution severities **and** out-of-distribution fault
+types (the headline number).
+
+**Deployed to pistar** (`~/rlpp/`, backward-compatible `residual_env.py` updated there) and
+**smoke-verified on the RTX 4060** (`python train_reptile_faults.py --smoke` → full pipeline runs,
+~12 s/meta-iter at toy scale). **Launch the real run on pistar:**
+```
+source ~/miniconda3/etc/profile.d/conda.sh && conda activate rlpp && export PYTHONNOUSERSITE=1
+cd ~/rlpp && nohup python train_reptile_faults.py --meta-iterations 200 --inner-steps 8000 \
+    --inner-envs 4 --utd 20 --tag reptile_faults_v1 > reptile_faults_v1.log 2>&1 &
+```
+**Optional** `adaptation_module.py`: RMA-style latent encoder from recent history (vs. Reptile
+fine-tune-from-init) — a later upgrade. **Exit gate:** recovers held-out in-distribution faults in
+≤ a few laps; honest OOD number.
 
 ### Phase D — Detector + safety guardrail
 **New** `fault_detector.py`: repurpose the `dynamics_model.py` ensemble as a state-prediction residual
