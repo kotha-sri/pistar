@@ -171,14 +171,36 @@ Prove the sim can inject realistic faults through existing hooks, before buildin
   — most of the text is already in `fault_injection.py` docstrings); tune severity ranges so each
   frontier fault spans clean→failure; add spatially-varying low-grip patch + wheel-drag channels.
 
-### Phase A — Fault taxonomy build-out
-Flesh out remaining channels (wheel drag, low-grip patch, gradual-decay scenarios matching LLA-MPC)
-to graded severities; document each. **Exit gate:** full taxonomy injectable and characterized.
+### Phase A — Fault taxonomy build-out ✅ DONE (2026-09-08)
+Added `LowGripPatch` (in-model, spatially-varying μ via `step_params` + car position — Continual-RL
+patch protocol), `WheelDrag` (out-of-model, longitudinal drag + yaw pull), FrictionDrop `sudden_mid`
+mode (LLA-MPC sudden-drop scenario, alongside `gradual`), and widened `steering_bias` severity range.
+**10 channels total** (4 in-model, 6 out-of-model); self-test passes. **Exit gate MET.**
 
-### Phase B — The regime proof (the paper's spine)
-**New** `eval_fault_matrix.py`: run the baseline matrix across the taxonomy at graded severities.
-**Goal:** the crossover — standard/robust baselines hold on in-model faults, degrade on out-of-model;
-adaptation recovers the out-of-model cases. **Exit gate:** a matrix showing the crossover.
+### Phase B — The regime proof (the paper's spine) — FIRST PASS DONE (2026-09-08)
+**New** `eval_fault_matrix.py`: standard Pure Pursuit (non-adaptive) × full taxonomy × severities ×
+seeds → `fault_matrix_results.json` + `fault_matrix_summary.md`. Run: `python eval_fault_matrix.py
+--track Spielberg --seeds 3`.
+
+**Findings (Spielberg, PP alone) — three groups, all honest and useful:**
+- **Faults that meaningfully break a non-adaptive PP** (graded, monotone, clear breakdown severity):
+  friction_drop, low_grip_patch, tire_stiffness (in-model); steering_loe, actuator_latency,
+  wheel_drag (out-of-model). These are the substrate for the crossover.
+- **steering_bias degrades *accuracy*, not survival:** PP's geometric feedback absorbs a constant
+  offset, so it never crashes but mean |d| blows up 0.025 → ~0.50 m. The metric that catches it is
+  tracking error, not completion — a good reminder to report both.
+- **Inert for PP by design:** obs_noise / obs_latency (PP reads sim state, not the observation
+  vector — they will only bite a policy that *consumes* obs, i.e. the RL residual), and mass_change
+  (mild at this ~4.5 m/s regime).
+
+**Design implication:** obs and bias faults belong in the RL-vs-RL comparison (they need a policy
+that uses the observation), while LoE/latency/drag are the out-of-model faults that already bite the
+non-adaptive baseline. **Exit gate (substrate):** MET — every fault has a controllable degradation
+profile. The full crossover still needs the ADAPTIVE baselines (adaptive-MPC/sysID + our residual).
+
+**Still open (per the key uncertainty):** the single-track sim exposes out-of-model faults well for
+LoE/latency/drag; mass and (for PP) bias are milder — worth checking whether a higher-fidelity
+actuator model sharpens them.
 
 ### Phase C — Meta-adaptation over faults
 **New** `train_reptile_faults.py` (fork of `train_reptile.py`): swap the task distribution from

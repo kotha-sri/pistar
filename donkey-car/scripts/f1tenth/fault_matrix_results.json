@@ -1,0 +1,353 @@
+{
+  "track": "Spielberg",
+  "seeds": 3,
+  "max_steps": 10000,
+  "controller": "pure_pursuit (alpha_rl=0)",
+  "faults": [
+    "friction_drop",
+    "low_grip_patch",
+    "tire_stiffness",
+    "mass_change",
+    "steering_bias",
+    "steering_loe",
+    "actuator_latency",
+    "wheel_drag",
+    "obs_noise",
+    "obs_latency"
+  ],
+  "severities": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "baseline": {
+    "completion_rate": 1.0,
+    "crash_rate": 0.0,
+    "mean_progress": 1.0003865214846612,
+    "mean_dev": 0.02557107459967044
+  },
+  "matrix": {
+    "friction_drop": {
+      "0.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.25": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.03592207219253638
+      },
+      "0.5": {
+        "completion_rate": 0.0,
+        "crash_rate": 1.0,
+        "mean_progress": 0.5352774549528191,
+        "mean_dev": 0.04508011540231843
+      },
+      "0.75": {
+        "completion_rate": 0.0,
+        "crash_rate": 1.0,
+        "mean_progress": 0.388181960641357,
+        "mean_dev": 0.06737308111394176
+      },
+      "1.0": {
+        "completion_rate": 0.0,
+        "crash_rate": 1.0,
+        "mean_progress": 0.13093677723237862,
+        "mean_dev": 0.1485208385173062
+      }
+    },
+    "low_grip_patch": {
+      "0.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.25": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.027411051660592056
+      },
+      "0.5": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.032493027177864654
+      },
+      "0.75": {
+        "completion_rate": 0.0,
+        "crash_rate": 1.0,
+        "mean_progress": 0.39048894165653053,
+        "mean_dev": 0.11979630478924204
+      },
+      "1.0": {
+        "completion_rate": 0.0,
+        "crash_rate": 1.0,
+        "mean_progress": 0.38857722567551395,
+        "mean_dev": 0.1034100287826825
+      }
+    },
+    "tire_stiffness": {
+      "0.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.25": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.033749921937527926
+      },
+      "0.5": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.04816774354907455
+      },
+      "0.75": {
+        "completion_rate": 0.0,
+        "crash_rate": 1.0,
+        "mean_progress": 0.5326784778404399,
+        "mean_dev": 0.054496353567968996
+      },
+      "1.0": {
+        "completion_rate": 0.0,
+        "crash_rate": 1.0,
+        "mean_progress": 0.13248775040707017,
+        "mean_dev": 0.144084048748895
+      }
+    },
+    "mass_change": {
+      "0.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.25": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.025571074599665167
+      },
+      "0.5": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.025571074599667343
+      },
+      "0.75": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.025571074599667343
+      },
+      "1.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.025571074599667527
+      }
+    },
+    "steering_bias": {
+      "0.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.25": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.12813821810487555
+      },
+      "0.5": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.2514539210871158
+      },
+      "0.75": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.3718610438555154
+      },
+      "1.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.4965593055585635
+      }
+    },
+    "steering_loe": {
+      "0.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.25": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.035380508230362664
+      },
+      "0.5": {
+        "completion_rate": 0.3333333333333333,
+        "crash_rate": 0.6666666666666666,
+        "mean_progress": 0.5963355391187085,
+        "mean_dev": 0.04072637894204527
+      },
+      "0.75": {
+        "completion_rate": 0.0,
+        "crash_rate": 1.0,
+        "mean_progress": 0.3889656263256051,
+        "mean_dev": 0.0641198372026051
+      },
+      "1.0": {
+        "completion_rate": 0.0,
+        "crash_rate": 1.0,
+        "mean_progress": 0.13093677723237862,
+        "mean_dev": 0.13289072417131595
+      }
+    },
+    "actuator_latency": {
+      "0.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.25": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.023298803922353045
+      },
+      "0.5": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.025412126491246214
+      },
+      "0.75": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.0315901767420609
+      },
+      "1.0": {
+        "completion_rate": 0.3333333333333333,
+        "crash_rate": 0.6666666666666666,
+        "mean_progress": 0.8037703574193578,
+        "mean_dev": 0.1940073855220952
+      }
+    },
+    "wheel_drag": {
+      "0.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.25": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.03589870475408589
+      },
+      "0.5": {
+        "completion_rate": 0.0,
+        "crash_rate": 0.0,
+        "mean_progress": 0.9003475556917069,
+        "mean_dev": 0.058033962056950834
+      },
+      "0.75": {
+        "completion_rate": 0.0,
+        "crash_rate": 0.0,
+        "mean_progress": 0.7709892711238756,
+        "mean_dev": 0.08244864074187418
+      },
+      "1.0": {
+        "completion_rate": 0.0,
+        "crash_rate": 0.0,
+        "mean_progress": 0.6411627723508351,
+        "mean_dev": 0.10910046969511074
+      }
+    },
+    "obs_noise": {
+      "0.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.25": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.5": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.75": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "1.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      }
+    },
+    "obs_latency": {
+      "0.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.25": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.5": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "0.75": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      },
+      "1.0": {
+        "completion_rate": 1.0,
+        "crash_rate": 0.0,
+        "mean_progress": 1.0003865214846612,
+        "mean_dev": 0.02557107459967044
+      }
+    }
+  }
+}

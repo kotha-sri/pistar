@@ -71,17 +71,22 @@ class Fault:
 # --------------------------------------------------------------------------- #
 
 class FrictionDrop(Fault):
-    """Global tire-road friction reduction. mode='sudden' (whole episode) or
-    'gradual' (linear decay from base_mu to target_mu over ramp_steps)."""
+    """Global tire-road friction reduction. Modes (matching LLA-MPC 2505.19512
+    scenarios): 'sudden' (whole episode at target_mu), 'gradual' (linear decay
+    from base_mu to target_mu over ramp_steps), 'sudden_mid' (base_mu until
+    onset_frac of episode_steps, then a sudden drop to target_mu)."""
     name = "friction_drop"
     fault_class = "in-model"
     mechanism = "worn tires / dust / wet or polished surface -> lower tire-road mu"
 
-    def __init__(self, target_mu=0.35, base_mu=0.5, mode="sudden", ramp_steps=1500):
+    def __init__(self, target_mu=0.35, base_mu=0.5, mode="sudden", ramp_steps=1500,
+                 onset_frac=0.5, episode_steps=8000):
         self.target_mu = float(target_mu)
         self.base_mu = float(base_mu)
         self.mode = mode
         self.ramp_steps = int(ramp_steps)
+        self.onset_frac = float(onset_frac)
+        self.episode_steps = int(episode_steps)
 
     def params(self, p):
         if self.mode == "sudden":
@@ -90,12 +95,50 @@ class FrictionDrop(Fault):
         return p
 
     def step_params(self, base, t):
-        if self.mode != "gradual":
+        if self.mode == "gradual":
+            frac = min(1.0, t / max(self.ramp_steps, 1))
+            mu = self.base_mu + frac * (self.target_mu - self.base_mu)
+        elif self.mode == "sudden_mid":
+            onset = self.onset_frac * self.episode_steps
+            mu = self.target_mu if t >= onset else self.base_mu
+        else:
             return None
-        frac = min(1.0, t / max(self.ramp_steps, 1))
-        mu = self.base_mu + frac * (self.target_mu - self.base_mu)
         p = dict(base)
         p["mu"] = mu
+        return p
+
+
+class LowGripPatch(Fault):
+    """Spatially-varying friction: mu drops to target_mu only while the car is
+    within a contiguous span of the reference path (a localized slick patch),
+    otherwise base_mu. Mirrors the 'polished-concrete patch' protocol of
+    Continual-RL on RoboRacer (2607.24320)."""
+    name = "low_grip_patch"
+    fault_class = "in-model"
+    mechanism = "localized low-grip zone (spilled fluid / wet or polished patch) -> mu drops only within a track region"
+
+    def __init__(self, target_mu=0.2, base_mu=0.5, frac_start=0.35, frac_end=0.55):
+        self.target_mu = float(target_mu)
+        self.base_mu = float(base_mu)
+        self.frac_start = float(frac_start)
+        self.frac_end = float(frac_end)
+        self._env = None
+        self._n = 1
+
+    def reset(self, env):
+        if env is None:
+            self._env = None
+            return
+        self._env = env
+        self._n = max(len(env.pp.wpts_xy) - 1, 1)
+
+    def step_params(self, base, t):
+        if self._env is None:
+            return None
+        frac = self._env._closest_idx / self._n
+        in_patch = self.frac_start <= frac <= self.frac_end
+        p = dict(base)
+        p["mu"] = self.target_mu if in_patch else self.base_mu
         return p
 
 
@@ -182,6 +225,21 @@ class ActuatorLatency(Fault):
         if len(self._buf) <= self.delay:
             return steer, vel          # not enough history yet: pass through
         return self._buf.pop(0)        # command from `delay` steps ago
+
+
+class WheelDrag(Fault):
+    """A dragging / partially-seized wheel: longitudinal drag (commanded velocity
+    is not fully realized) plus a constant yaw pull to one side."""
+    name = "wheel_drag"
+    fault_class = "out-of-model"
+    mechanism = "dragging/seizing wheel (bearing or binding brake) -> longitudinal drag + constant yaw pull"
+
+    def __init__(self, vel_loss=0.25, yaw_bias=0.02):
+        self.vel_loss = float(vel_loss)
+        self.yaw_bias = float(yaw_bias)
+
+    def command(self, steer, vel, t):
+        return steer + self.yaw_bias, vel * (1.0 - self.vel_loss)
 
 
 class ObservationNoise(Fault):
@@ -285,16 +343,22 @@ def from_spec(name, severity, base_mu=0.5):
         return FrictionDrop(target_mu=base_mu - s * 0.35, base_mu=base_mu, mode="sudden")
     if name == "friction_drop_gradual":
         return FrictionDrop(target_mu=base_mu - s * 0.35, base_mu=base_mu, mode="gradual")
+    if name == "friction_drop_mid":
+        return FrictionDrop(target_mu=base_mu - s * 0.35, base_mu=base_mu, mode="sudden_mid")
+    if name == "low_grip_patch":
+        return LowGripPatch(target_mu=base_mu - s * 0.40, base_mu=base_mu)
     if name == "tire_stiffness":
         return TireStiffnessChange(scale=1.0 - s * 0.6)
     if name == "mass_change":
         return MassChange(scale=1.0 + s * 0.6)
     if name == "steering_bias":
-        return SteeringBias(bias_rad=s * 0.10)          # up to ~5.7 deg
+        return SteeringBias(bias_rad=s * 0.22)          # up to ~12.6 deg (spans clean->failure)
     if name == "steering_loe":
         return SteeringLossOfEffectiveness(loe=s * 0.7)  # up to 70% loss
     if name == "actuator_latency":
         return ActuatorLatency(delay_steps=int(round(s * 12)))
+    if name == "wheel_drag":
+        return WheelDrag(vel_loss=s * 0.45, yaw_bias=s * 0.05)
     if name == "obs_noise":
         return ObservationNoise(std=s * 0.15)
     if name == "obs_latency":
@@ -302,8 +366,9 @@ def from_spec(name, severity, base_mu=0.5):
     raise ValueError(f"unknown fault name: {name}")
 
 
-IN_MODEL = ["friction_drop", "tire_stiffness", "mass_change"]
-OUT_OF_MODEL = ["steering_bias", "steering_loe", "actuator_latency", "obs_noise", "obs_latency"]
+IN_MODEL = ["friction_drop", "low_grip_patch", "tire_stiffness", "mass_change"]
+OUT_OF_MODEL = ["steering_bias", "steering_loe", "actuator_latency", "wheel_drag",
+                "obs_noise", "obs_latency"]
 ALL_FAULTS = IN_MODEL + OUT_OF_MODEL
 
 
