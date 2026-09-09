@@ -248,9 +248,18 @@ guardrail ramps 1.0→0.5→0 with a velocity derate on hard fallback. Runs inde
 **Exit-gate substrate MET** (separates fault from cornering); full ROC + integration is Phase E.
 Reproduce: `python fault_detector.py`.
 
-### Phase E — Online self-supervised recovery
-Combine C+D: recover from a mid-run fault online from the progress/deviation signal, guardrail
-keeping it alive. **Exit gate:** few-lap online recovery on real faults with **zero training crashes**.
+### Phase E — Online self-supervised recovery — CLOSED LOOP SCAFFOLDED (2026-09-09)
+**New** `online_recovery.py` composes C+D: `guarded_rollout` runs base PP + meta-init residual, the
+`ResidualMonitor` watches the yaw innovation, and the `FallbackGuardrail` scales/reverts the residual
+using the **confirmed** (persistence-gated) fault signal. `recover()` is the full GPU loop (load
+meta-init → calibrate detector on a clean lap → guarded rollout under fault → online self-supervised
+fine-tune → re-eval), reusing the proven jax pieces from `train_reptile_faults`.
+**CPU smoke (Spielberg, standard PP, zero-residual stub): steering_loe detect@337→guardrail@338,
+friction_drop 336→337, wheel_drag 416→417; clean → no detect, guardrail idle.** The closed loop is
+correct: fault confirmed → guardrail engages one step later → reverts residual to base.
+**Remaining for the exit gate (needs GPU + the v2 meta-init):** run `recover()` end-to-end and show
+**few-lap online recovery with zero crashes during adaptation** — guardrail-limited safe exploration
+during the online fine-tune is the open piece. Reproduce the loop: `python online_recovery.py`.
 
 ### Later (not committed here)
 DonkeySim transfer (reuse the Phase-0 obs contract from `plan.md`); second wheeled embodiment for the
