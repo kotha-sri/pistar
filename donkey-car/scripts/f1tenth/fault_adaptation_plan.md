@@ -224,11 +224,29 @@ cd ~/rlpp && nohup python train_reptile_faults.py --meta-iterations 200 --inner-
 fine-tune-from-init) — a later upgrade. **Exit gate:** recovers held-out in-distribution faults in
 ≤ a few laps; honest OOD number.
 
-### Phase D — Detector + safety guardrail
-**New** `fault_detector.py`: repurpose the `dynamics_model.py` ensemble as a state-prediction residual
-monitor (large error = "model is wrong") + fallback-safe clamp/revert-to-base (Sinha & Pavone 2023).
-Runs independently of adaptation. **Exit gate:** separates fault onset from hard cornering (ROC);
-guardrail prevents crashes the unguarded adapter would cause.
+**v1 RESULT (see `reptile_faults_v1_results.md`):** 200 iters, best-score 3→10→12→13. Headline —
+at its peak (iter 175) the meta-init completes **3/3 laps zero-shot on all 7 held-out fault tasks,
+including 3 never-trained OOD types** (`mass_change`, `obs_latency`, `friction_drop_mid`): robust
+zero-shot generalization to unseen fault *types*. Two flaws v1 exposed, both fixed in code for v2:
+(1) **meta-instability** — the iter-200 checkpoint collapsed to 0/7 zero-shot (v5/v7 pattern) → added
+`--meta-clip` (global-L2-norm clip on the Reptile delta) + use lower `--inner-lr`/`--epsilon-end`;
+(2) **checkpoint metric ignored zero-shot** (scored only the 4K-adapt budget, so it saved the wrong
+checkpoint) → `best_score` now weights **0-adapt completion 2×**. **v2 launch** (pending pistar
+reachability): `--inner-lr 5e-4 --epsilon-end 0.05 --meta-clip 5.0 --tag reptile_faults_v2`.
+
+### Phase D — Detector + safety guardrail — SCAFFOLDED + smoke-passing (2026-09-09)
+**New** `fault_detector.py`: `ResidualMonitor` — a **position-conditioned**, smoothed yaw-innovation
+detector (the nominal kinematic bicycle predicts yaw_rate = vx/L·tan(steer); a fault makes the
+observed yaw_rate diverge). Calibrates a per-track-position clean baseline, then flags when the
+smoothed residual stays > z·σ above the *local* nominal for `persistence` steps — position-
+conditioning + a startup grace period are what separate faults from hard cornering. `FallbackGuardrail`
+— attenuates the learned residual toward the base action as risk rises, hard-reverting (+velocity
+derate) above a threshold (ARPO-style + Sinha & Pavone 2023). `EnsembleResidualMonitor` stubbed for
+the richer `dynamics_model.py`-backed predictor. **Smoke (Spielberg, standard PP): clean → no flag;
+all four faults (steering_loe, steering_bias, friction_drop, wheel_drag) flagged @ steps 299–438;**
+guardrail ramps 1.0→0.5→0 with a velocity derate on hard fallback. Runs independently of adaptation.
+**Exit-gate substrate MET** (separates fault from cornering); full ROC + integration is Phase E.
+Reproduce: `python fault_detector.py`.
 
 ### Phase E — Online self-supervised recovery
 Combine C+D: recover from a mid-run fault online from the progress/deviation signal, guardrail

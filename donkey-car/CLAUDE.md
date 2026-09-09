@@ -31,6 +31,11 @@ loss-of-effectiveness/latency, low-grip patch, etc.) that classical adaptive con
 handle. Racing/F1TENTH is the fault-injectable testbed.
 
 - **Active charter:** `scripts/f1tenth/fault_adaptation_plan.md` (supersedes `plan.md`, kept for history).
-- **Phase 0 DONE:** `fault_injection.py` + `residual_env.py` (`faults=` kwarg) + `demo_fault_injection.py`
-  (`python demo_fault_injection.py --track Spielberg`).
-- Next: Phase A/B — fault taxonomy build-out + `eval_fault_matrix.py` (the in-model vs out-of-model crossover).
+- **Phases 0–D landed** (see `scripts/f1tenth/fault_adaptation_plan.md`): Phase 0 fault injection;
+  A/B `eval_fault_matrix.py` (in-model vs out-of-model crossover substrate); C `train_reptile_faults.py`
+  (Reptile-over-faults — v1 run showed robust zero-shot generalization to unseen fault *types*, plus
+  meta-instability; `reptile_faults_v1_results.md`); D `fault_detector.py` (position-conditioned
+  detector + fallback guardrail, smoke-passing).
+- **Next:** launch `reptile_faults_v2` on pistar (stability fixes: `--meta-clip 5.0 --inner-lr 5e-4
+  --epsilon-end 0.05`) when the box is reachable; then Phase E (integrate detector+guardrail+online
+  adaptation for mid-run recovery) and port MAP/Follow-the-Gap as extra standard baselines.

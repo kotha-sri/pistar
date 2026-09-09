@@ -40,6 +40,7 @@ import jax
 from train_reptile import (
     snapshot_params, load_params, reptile_interpolate, create_model,
     save_meta_checkpoint, load_meta_checkpoint, discover_valid_tracks,
+    _WEIGHT_KEYS,
 )
 import fault_injection as fi
 import fault_distribution as fd
@@ -48,6 +49,31 @@ from fault_distribution import make_fault_env_fn, sample_task
 
 HELD_OUT_TRACKS = ["Austin", "Monza", "Silverstone"]   # keep eval geometry unseen
 WARMUP_TRACKS = ["Spielberg", "Sakhir", "Spa"]
+
+
+def reptile_interpolate_clipped(meta, adapted, epsilon, max_norm):
+    """Reptile update with global-L2-norm clipping on the delta, to damp the
+    late-training collapse seen in v1 (and the v5/v7 track runs). Clips the
+    combined (adapted - meta) norm over the interpolated weight keys to max_norm
+    before taking the epsilon step. max_norm<=0 disables (falls back to plain)."""
+    import jax.numpy as jnp
+    if max_norm <= 0:
+        return reptile_interpolate(meta, adapted, epsilon)
+    sq = 0.0
+    for k in _WEIGHT_KEYS:
+        for lm, la in zip(jax.tree_util.tree_leaves(meta[k]),
+                          jax.tree_util.tree_leaves(adapted[k])):
+            sq = sq + jnp.sum((la - lm) ** 2)
+    norm = jnp.sqrt(sq)
+    scale = jnp.minimum(1.0, max_norm / (norm + 1e-8))
+    out = {}
+    for k in meta:
+        if k in _WEIGHT_KEYS:
+            out[k] = jax.tree.map(lambda m, a: m + epsilon * scale * (a - m),
+                                  meta[k], adapted[k])
+        else:
+            out[k] = meta[k]
+    return out
 
 
 def base_env_kwargs(args):
@@ -160,6 +186,8 @@ def main():
     ap.add_argument("--batch-size", type=int, default=256)
     ap.add_argument("--epsilon-start", type=float, default=1.0)
     ap.add_argument("--epsilon-end", type=float, default=0.1)
+    ap.add_argument("--meta-clip", type=float, default=0.0,
+                    help="Global-L2-norm clip on the Reptile delta (0=off); damps late-training collapse.")
     ap.add_argument("--warmup-steps", type=int, default=50_000)
     ap.add_argument("--eval-every", type=int, default=25)
     ap.add_argument("--save-every", type=int, default=25)
@@ -243,7 +271,8 @@ def main():
         load_params(inner, meta_params)
         inner.learn(total_timesteps=args.inner_steps)
         adapted = snapshot_params(inner)
-        meta_params = reptile_interpolate(meta_params, adapted, epsilon)
+        meta_params = reptile_interpolate_clipped(meta_params, adapted, epsilon,
+                                                  args.meta_clip)
         env.close()
         del inner, adapted
         gc.collect()
@@ -270,6 +299,9 @@ def main():
             ood_res = evaluate_fault_adaptation(meta_params, ood_tasks, tracks_dir, args,
                                                 eval_adapt, env_kwargs,
                                                 n_laps=eval_laps, step_cap=eval_cap)
+            # Checkpoint score weights ZERO-SHOT completion (robustness) 2x, plus
+            # completions at the adapt budgets. v1's bug: it scored only the last
+            # (4K) budget, so it saved a checkpoint whose zero-shot had collapsed.
             score = 0
             last = eval_adapt[-1]
             for label, res in (("ID", id_res), ("OOD", ood_res)):
@@ -277,7 +309,9 @@ def main():
                     summ = " ".join(f"{a}:{cells[a]['completed']}" for a in eval_adapt)
                     print(f"    [{label}] {key:<22s} {summ} "
                           f"(prog@{last} {cells[last]['progress']*100:.0f}%)")
-                    score += cells[last]["completed"]
+                    zs = cells[eval_adapt[0]]["completed"]           # 0-adapt = robustness
+                    ad = sum(cells[a]["completed"] for a in eval_adapt[1:])
+                    score += 2 * zs + ad
             if score > best_score:
                 best_score = score
                 bp = save_meta_checkpoint(meta_params, it + 1, save_dir)
