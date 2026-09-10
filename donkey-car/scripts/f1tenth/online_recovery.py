@@ -37,8 +37,11 @@ BASE_KW = dict(alpha_rl=1.0, velocity_gain=0.5, mu_noise_std=0.0,
                velocity_curriculum=False, pp_reference="centerline")
 
 
-def _clean_baseline(track, tracks_dir, cap=10000):
-    """Run clean PP and calibrate the position-conditioned detector baseline."""
+def _clean_baseline(track, tracks_dir, residual_fn=None, cap=10000):
+    """Calibrate the position-conditioned detector baseline on the HEALTHY DEPLOYED
+    behavior (base + residual, no fault). It must match what runs at deployment --
+    if we calibrate on pure PP but deploy base+residual, a healthy residual reads
+    as a fault. residual_fn=None => pure Pure Pursuit (zeros)."""
     env = RLPPEnv(track_name=track, tracks_dir=tracks_dir, max_laps=1,
                   faults=None, **BASE_KW)
     n_wp = max(len(env.pp.wpts_xy) - 1, 1)
@@ -46,7 +49,9 @@ def _clean_baseline(track, tracks_dir, cap=10000):
     res, pos = [], []
     for _ in range(cap):
         steer_cmd, _ = env.pp.get_action(env._last_pos, env._last_heading)
-        obs, r, term, trunc, info = env.step(np.zeros(2, dtype=np.float32))
+        a = (np.zeros(2, dtype=np.float32) if residual_fn is None
+             else np.asarray(residual_fn(obs), dtype=np.float32))
+        obs, r, term, trunc, info = env.step(a)
         res.append(kinematic_yaw_residual(float(obs[2]), float(steer_cmd[0]), float(obs[4])))
         pos.append(env._closest_idx / n_wp)
         if info["collision"] or term or trunc:
@@ -117,10 +122,6 @@ def recover(meta_params_path, track, fault_name, severity, tracks_dir,
     from stable_baselines3.common.vec_env import DummyVecEnv
     from fault_distribution import make_fault_env_fn
 
-    bmean, bstd = _clean_baseline(track, tracks_dir)
-    monitor = ResidualMonitor(); monitor.set_baseline(bmean, bstd)
-    guardrail = FallbackGuardrail()
-
     args = types.SimpleNamespace(inner_lr=5e-4, inner_steps=adapt_steps,
                                  batch_size=256, utd=20, seed=42)
     env = DummyVecEnv([make_fault_env_fn(track, tracks_dir, fault_name, severity,
@@ -131,6 +132,12 @@ def recover(meta_params_path, track, fault_name, severity, tracks_dir,
     def residual_fn(obs):
         a, _ = model.predict(np.asarray(obs), deterministic=True)
         return a
+
+    # Calibrate the detector on the HEALTHY DEPLOYED behavior (base + residual, no
+    # fault) -- must match deployment, else a healthy residual reads as a fault.
+    bmean, bstd = _clean_baseline(track, tracks_dir, residual_fn=residual_fn)
+    monitor = ResidualMonitor(); monitor.set_baseline(bmean, bstd)
+    guardrail = FallbackGuardrail()
 
     # 1. Guarded rollout BEFORE online adaptation (detect + survive on the meta-init).
     fault = fi.from_spec(fault_name, severity)
