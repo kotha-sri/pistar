@@ -276,7 +276,12 @@ def main():
         env.close()
         del inner, adapted
         gc.collect()
-        if (it + 1) % 10 == 0:
+        # v2 was OOM-killed at iter 125 (~22GB anon-rss, ~175MB/iter growth).
+        # Clear JAX caches more aggressively to reduce host-RAM accumulation.
+        # NOTE: for a guaranteed-complete long run, prefer chunked --resume (run
+        # ~60 iters, let the process exit to free everything, relaunch --resume),
+        # which caps cumulative memory regardless of the leak source.
+        if (it + 1) % 3 == 0:
             jax.clear_caches()
 
         print(f"  [{it+1}/{args.meta_iterations}] {fault_name}@{sev:.2f} on {track:<14s} "
